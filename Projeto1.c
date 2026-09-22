@@ -4,28 +4,30 @@
 
 int main()
 {
-    lista *L = CriaLista
-    int Opcao;
-
-    printf("**************************************************************");
-    printf("\n Gerenciador de Manutencao de Equipamentos de um Laboratorio");
-
-    printf("\n\n\tDigite 1 - NOVA SOLICITACAO");
-    printf("\n\tDigite 2 - REMOVER SOLICITACAO");
-    printf("\n\tDigite 3 - CONSULTAR SOLICITACAO");
-    printf("\n\tDigite 4 - ALTERAR PRIORIDADE E/OU PERIODO DE SOLICITACAO");
-    printf("\n\tDigite 5 - ORDEM DA REALIZACAO DA MANUTENCAO");
-    printf("\n\tDigite 6 - TODAS SOLICITACOES");
-    printf("\n\tDigite 0 - SAIR");
-
-    printf("\n\n**************************************************************");
+    Lista *L = CriaLista();
+    int Opcao, valor;
 
     do{
+        printf("**************************************************************");
+        printf("\n Gerenciador de Manutencao de Equipamentos de um Laboratorio");
+
+        printf("\n\n\tDigite 1 - NOVA SOLICITACAO");
+        printf("\n\tDigite 2 - REMOVER SOLICITACAO");
+        printf("\n\tDigite 3 - CONSULTAR SOLICITACAO");
+        printf("\n\tDigite 4 - ALTERAR PRIORIDADE E/OU PERIODO DE SOLICITACAO");
+        printf("\n\tDigite 5 - ORDEM DA REALIZACAO DA MANUTENCAO");
+        printf("\n\tDigite 6 - TODAS SOLICITACOES");
+        printf("\n\tDigite 0 - SAIR");
+
+        printf("\n\n**************************************************************");
+
         scanf("%d", &Opcao);
 
         switch(Opcao){
             case 1:
-                printf("Ola");
+                valor = LeCodigo();
+                insereCodigo(L, valor);
+                printf("O codigo passado foi: %d \n\n", valor);
                 break;
             case 2:
                 break;
@@ -44,7 +46,7 @@ int main()
                 break;
         }
     }
-    while (Opcao <0  || Opcao > 7);
+    while (Opcao != 0);
 
 
     return 0;
