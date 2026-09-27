@@ -25,11 +25,12 @@ int main()
 
         switch(Opcao){
             case 1:
-                valor = LeCodigo();
-                insereCodigo(L, valor);
-                printf("O codigo passado foi: %d \n\n", valor);
+                valor = LeCodigo(L);
+                Solicitacao novasolicitacao =  preencher(valor);
+                insereCodigo(L,novasolicitacao);
                 break;
             case 2:
+
                 break;
             case 3:
                 break;
@@ -38,6 +39,7 @@ int main()
             case 5:
                 break;
             case 6:
+                imprimir(L);
                 break;
             case 0:
                 break;
@@ -51,4 +53,3 @@ int main()
 
     return 0;
 }
-
