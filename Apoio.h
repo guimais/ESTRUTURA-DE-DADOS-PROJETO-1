@@ -2,6 +2,7 @@
 #define APOIO_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
     int  CodigoDeSolicitacao;
@@ -45,7 +46,7 @@ int LeCodigo(Lista *L) {
         printf("Escreva um codigo de quatro digitos: ");
         scanf("%d", &codigoQuatro);
         if (codigoQuatro < 1000 || codigoQuatro > 9999) {
-            printf("Numero invalido, coloque um decente.\n");
+            printf("Numero invalido.\n");
         }
         else if (busca(L, codigoQuatro) == 1) {
             printf("Este codigo ja esta em uso\n");
@@ -57,36 +58,36 @@ int LeCodigo(Lista *L) {
 
 void insereCodigo(Lista *L, Solicitacao novaSolicitacao) {
     No *novo = (No*)malloc(sizeof(No));
+    novo -> info = novaSolicitacao;
+    novo -> prox = NULL;
 
-    
-    novo->info = novaSolicitacao;
-    novo->prox = NULL;
-
-  
-    if (L->inicio == NULL || L->inicio->info.CodigoDeSolicitacao >= novaSolicitacao.CodigoDeSolicitacao) {
-        novo->prox = L->inicio;
-        L->inicio = novo;
+    if (L -> inicio == NULL || L -> inicio -> info.CodigoDeSolicitacao >= novaSolicitacao.CodigoDeSolicitacao) {
+        novo -> prox = L -> inicio;
+        L -> inicio = novo;
         return;
     }
-   
+
     No *atual = L->inicio;
-    
-    while (atual->prox != NULL && atual->prox->info.CodigoDeSolicitacao < novaSolicitacao.CodigoDeSolicitacao) {
-        atual = atual->prox;
+    while (atual -> prox != NULL && atual -> prox -> info.CodigoDeSolicitacao < novaSolicitacao.CodigoDeSolicitacao) {
+        atual = atual -> prox;
     }
-    
-    novo->prox = atual->prox;
-    atual->prox = novo;
+    novo -> prox = atual -> prox;
+    atual -> prox = novo;
 }
+
+void imprimeSolicitacao(Solicitacao s) {
+    printf("Codigo :%d\n", s.CodigoDeSolicitacao);
+    printf("Equipamento:%s\n", s.CodigoEquipamentos);
+    printf("Nome:%s\n", s.nome);
+    printf("Prioridade:%d\n", s.prioridade);
+    printf("Periodo (dias):%d\n", s.periodo);
+}
+
 void imprimir(Lista *L) {
-    No *aux= L->inicio;
-    while (aux!=NULL) {
-        printf("Codigo :%d\n",aux->info.CodigoDeSolicitacao);
-        printf("Equipamento:%s\n",aux->info.CodigoEquipamentos);
-        printf("Nome:%s\n",aux->info.nome);
-        printf("Prioridade:%d\n",aux->info.prioridade);
-        printf("Periodo (dias):%d\n",aux->info.periodo);
-        aux=aux->prox;
+    No *aux = L->inicio;
+    while (aux != NULL) {
+        imprimeSolicitacao(aux->info);
+        aux = aux->prox;
     }
 }
 
@@ -94,35 +95,63 @@ Solicitacao preencher(int codigoQuatro){
     Solicitacao atual;
     atual.CodigoDeSolicitacao = codigoQuatro;
     while (getchar() != '\n');
-    printf("qual o nome do equipamento?");
+    printf("Qual o nome do equipamento?");
     fgets(atual.nome, 20, stdin);
 
     printf("Codigo do Equipamento (Ex: OSC023): ");
     fgets(atual.CodigoEquipamentos, 7, stdin);
-    atual.prioridade=0;
-    while (atual.prioridade <1 || atual.prioridade>3) {
-            printf("qual a prioridade?");
-            scanf("%d",&atual.prioridade);
-        if (atual.prioridade<1 || atual.prioridade>3) {
-            printf("digite uma prioridade de 1 a 3");
+    atual.prioridade = 0;
+    while (atual.prioridade < 1 || atual.prioridade > 3) {
+        printf("Qual a prioridade?");
+        scanf("%d",&atual.prioridade);
+        switch (atual.prioridade) {
+            case 1:
+            case 2:
+            case 3:
+                break;
+            default:
+                printf("Digite uma prioridade de 1 a 3");
         }
     }
-    int flag =0;
-    while (flag==0) {
-        printf("Qual o perido?");
+    int flag = 0;
+    while (flag == 0) {
+        printf("Qual o periodo?");
         scanf("%d",&atual.periodo);
-        if (atual.prioridade==1 && atual.periodo>=1 && atual.periodo<=7) {
-            flag=1;
-        }else if (atual.prioridade == 2 && atual.periodo >= 1 && atual.periodo <= 15) {
-            flag = 1;
-        } else if (atual.prioridade == 3 && atual.periodo >= 1 && atual.periodo <= 20) {
-            flag = 1;
-        } else {
+        switch (atual.prioridade) {
+            case 1:
+                if (atual.periodo >= 1 && atual.periodo <= 7) {
+                    flag = 1;
+                }
+                break;
+            case 2:
+                if (atual.periodo >= 1 && atual.periodo <= 15) {
+                    flag = 1;
+                }
+                break;
+            case 3:
+                if (atual.periodo >= 1 && atual.periodo <= 20) {
+                    flag = 1;
+                }
+                break;
+        }
+        if (flag == 0) {
             printf("Periodo invalido para a prioridade %d. Tente novamente.\n", atual.prioridade);
         }
     }
     return atual;
+}
+
+int buscaNo(Lista *L, int cod) {
+    No *aux = L -> inicio;
+    while (aux != NULL && aux -> info.CodigoDeSolicitacao != cod) {
+        aux = aux -> prox;
     }
+    if (aux == NULL) {
+        return -1;
+    }
+    return aux -> info.CodigoDeSolicitacao;
+}
+
 
 
 
